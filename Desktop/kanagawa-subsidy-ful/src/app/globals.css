@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 47.4% 11.2%; /* #F0F2F5 (明るいグレー) - HSL: 220, 13%, 94% */
+    --foreground: 222.2 47.4% 11.2%; /* #1c1c1c (ほぼ黒) - HSL: 0, 0%, 11% */
+
+    --card: 0 0% 100%; /* 白 */
+    --card-foreground: 222.2 47.4% 11.2%; /* #1c1c1c (ほぼ黒) */
+
+    --popover: 0 0% 100%; /* 白 */
+    --popover-foreground: 222.2 47.4% 11.2%; /* #1c1c1c (ほぼ黒) */
+
+    --primary: 238 52% 37%; /* #2E3192 (深い青) */
+    --primary-foreground: 0 0% 100%; /* 白 */
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 216 12.2% 66.9%;
+
+    --accent: 43 100% 61%; /* #FFC13B (暖かい黄色) */
+    --accent-foreground: 222.2 47.4% 11.2%; /* #1c1c1c (ほぼ黒) */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 238 52% 37%; /* #2E3192 (深い青) */
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body; /* 背景色と本文フォントを適用 */
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display; /* 見出しフォントを適用 */
+  }
+}

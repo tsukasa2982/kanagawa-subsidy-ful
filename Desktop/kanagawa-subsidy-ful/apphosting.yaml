@@ -1,0 +1,34 @@
+# This file is used by Firebase App Hosting.
+# It specifies the configuration for building and running the Next.js app,
+# including environment variables and scheduled jobs.
+
+runConfig:
+  minInstances: 0
+  maxInstances: 1
+  concurrency: 80
+
+# Configure the build process for the Next.js app
+build:
+  # The command to build the application
+  buildCommand: 'npm run build'
+  # The command to install dependencies
+  installCommand: 'npm install'
+
+# Define environment variables to be available during the build and runtime
+env:
+  - variable: GOOGLE_GENAI_API_KEY
+    secret: 'kanagawa-subsidy-google-genai-api-key' # This should match the secret you create in GCP
+
+# Define scheduled jobs (cron jobs)
+scheduledJobs:
+  - # Weekly job to run the Genkit flow for fetching and processing subsidies
+    # This runs every Sunday at 00:00 UTC
+    schedule: '0 0 * * 0'
+    # The HTTP endpoint to trigger. Genkit exposes flows at /flows/
+    httpTarget:
+      # The path to the specific flow. '/flows/' is prefixed by Genkit.
+      path: '/flows/fetchAndProcessSubsidies'
+    timeZone: 'Asia/Tokyo' # Run on Tokyo time
+    retryConfig:
+      retryCount: 1
+      minBackoffDuration: '60s'
