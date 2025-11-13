@@ -1,0 +1,9 @@
+{
+  "apphosting": [
+    {
+      "backend": "kanagawa-subsidy-ful",
+      "rootDir": ".",
+      "region": "asia-east1"
+    }
+  ]
+}
