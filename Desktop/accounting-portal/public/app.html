@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base target="_top">
+  <title>会計ポータル</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* アコーディオン用のスタイル */
+    .accordion-group { margin-bottom: 10px; border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 10px; overflow: hidden; }
+    .accordion-header { background: rgba(0,0,0,0.2); padding: 15px 20px; font-size: 22px; cursor: pointer; user-select: none; transition: background-color 0.3s; display: flex; justify-content: space-between; align-items: center; }
+    .accordion-header:hover { background: rgba(0,0,0,0.4); }
+    .accordion-header::after { content: '▼'; font-size: 16px; transition: transform 0.3s; }
+    .accordion-header.active::after { transform: rotate(180deg); }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out; }
+    .accordion-content-inner { padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header-section">
+      <h1 id="client-name-heading">会計ポータル</h1>
+    </div>
+    <p class="description">ツールを利用したい会社を選択してください。</p>
+    <div id="company-list-container">
+      </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0Pbky1S2z99_pHecpyV3kFaXWVdok9A",
+      authDomain: "visionapiproject-445610.firebaseapp.com",
+      projectId: "visionapiproject-445610",
+      storageBucket: "visionapiproject-445610.appspot.com",
+      messagingSenderId: "467175218532",
+      appId: "1:467175218532:web:235d41eebe36be9e32ae71",
+      measurementId: "G-9MDE72R6X4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    const GOJUON = ['あ', 'か', 'さ', 'た', 'な', 'は', 'ま', 'や', 'ら', 'わ', '英数他'];
+
+    async function loadData() {
+      const querySnapshot = await getDocs(collection(db, "clients"));
+      const clients = [];
+      querySnapshot.forEach(doc => {
+        if (doc.id !== 'main-portal' && doc.data().name && doc.data().groupKey) {
+            clients.push({ id: doc.id, ...doc.data() });
+        }
+      });
+      displayData(clients);
+    }
+
+function getGojuonGroup(char) {
+    switch (char) {
+        case 'あ': case 'い': case 'う': case 'え': case 'お':
+            return 'あ';
+        case 'か': case 'き': case 'く': case 'け': case 'こ':
+        case 'が': case 'ぎ': case 'ぐ': case 'げ': case 'ご':
+            return 'か';
+        case 'さ': case 'し': case 'す': case 'せ': case 'そ':
+        case 'ざ': case 'じ': case 'ず': case 'ぜ': case 'ぞ':
+            return 'さ';
+        case 'た': case 'ち': case 'つ': case 'て': case 'と':
+        case 'だ': case 'ぢ': case 'づ': case 'で': case 'ど':
+            return 'た';
+        case 'な': case 'に': case 'ぬ': case 'ね': case 'の':
+            return 'な';
+        case 'は': case 'ひ': case 'ふ': case 'へ': case 'ほ':
+        case 'ば': case 'び': case 'ぶ': case 'べ': case 'ぼ':
+        case 'ぱ': case 'ぴ': case 'ぷ': case 'ぺ': case 'ぽ':
+            return 'は';
+        case 'ま': case 'み': case 'む': case 'め': case 'も':
+            return 'ま';
+        case 'や': case 'ゆ': case 'よ':
+            return 'や';
+        case 'ら': case 'り': case 'る': case 'れ': case 'ろ':
+            return 'ら';
+        case 'わ': case 'を': case 'ん':
+            return 'わ';
+        default:
+            return '英数他';
+    }
+}
+
+    function displayData(clients) {
+      const linksContainer = document.getElementById('company-list-container');
+      linksContainer.innerHTML = '';
+
+      const groupedClients = clients.reduce((acc, client) => {
+        const groupName = getGojuonGroup(client.groupKey) + '行';
+        if (!acc[groupName]) {
+          acc[groupName] = [];
+        }
+        acc[groupName].push(client);
+        return acc;
+      }, {});
+
+      const sortedGroupNames = Object.keys(groupedClients).sort((a, b) => {
+          const indexA = GOJUON.findIndex(g => a.startsWith(g));
+          const indexB = GOJUON.findIndex(g => b.startsWith(g));
+          return indexA - indexB;
+      });
+
+      sortedGroupNames.forEach(groupName => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'accordion-group';
+        
+        let buttonsHtml = '';
+        // 顧問先を名前順にソートしてからボタンを生成
+        groupedClients[groupName].sort((a, b) => a.name.localeCompare(b.name, 'ja')).forEach(client => {
+            buttonsHtml += `<a href="/c/${client.id}" class="company-button">${client.name}</a>`;
+        });
+
+        groupDiv.innerHTML = `
+          <div class="accordion-header">${groupName}</div>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">${buttonsHtml}</div>
+          </div>
+        `;
+        linksContainer.appendChild(groupDiv);
+      });
+      
+      // h1とタイトルをmain-portalから取得して設定
+      getDoc(doc(db, "clients", "main-portal")).then(docSnap => {
+          if(docSnap.exists()){
+              const portalData = docSnap.data();
+              document.title = portalData.name || '会計ポータル';
+              document.querySelector('.header-section h1').textContent = portalData.name || '会計ポータル';
+              loadTheme(portalData.theme);
+          }
+      });
+      
+      // アコーディオンの開閉機能
+      linksContainer.addEventListener('click', function(e) {
+          if (e.target.classList.contains('accordion-header')) {
+              const header = e.target;
+              const content = header.nextElementSibling;
+              header.classList.toggle('active');
+              if (content.style.maxHeight) {
+                  content.style.maxHeight = null;
+                  content.style.padding = '0';
+              } else {
+                  const inner = content.querySelector('.accordion-content-inner');
+                  content.style.maxHeight = inner.scrollHeight + 40 + 'px';
+                  content.style.padding = '20px 0';
+              }
+          }
+      });
+    }
+
+    function loadTheme(theme) {
+      // 既存の lassen-style.css を読み込むためのCSSリンクを生成
+      const linkEl = document.createElement('link');
+      linkEl.rel = 'stylesheet';
+      linkEl.href = `/styles/lassen-style.css`;
+      document.head.appendChild(linkEl);
+    }
+
+    loadData();
+  </script>
+
+  <div style="position: fixed; bottom: 10px; right: 10px; font-size: 12px; opacity: 0.7;">
+    <a href="/admin-secure-panel" target="_blank" style="color: white; font-weight: bold;">管理者用</a>
+  </div>
+
+</body>
+</html>

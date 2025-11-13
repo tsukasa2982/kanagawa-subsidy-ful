@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>管理画面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { font-size: 1.1em; border-bottom: 1px solid #f0f0f0; margin-top: 25px; }
+        input[type="text"], select, button { padding: 12px 18px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }
+        button { cursor: pointer; background-color: #007bff; color: white; border: none; transition: background-color 0.2s; }
+        button:hover { background-color: #0056b3; }
+        textarea, .link-item input, #new-client-name, #new-client-groupkey, #editing-groupkey { width: -webkit-fill-available; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { height: 80px; margin-bottom: 20px; }
+        .flex-container, .form-grid { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        #new-client-name, #editing-client-name-display { flex: 3; }
+        #new-client-groupkey, #editing-groupkey { flex: 1; }
+        .link-item { display: flex; align-items: center; margin-bottom: 10px; border: 1px solid #e0e0e0; padding: 10px; border-radius: 5px; }
+        .link-item input { flex: 1; margin-right: 10px; }
+        .delete-btn { background-color: #dc3545; }
+        .delete-btn:hover { background-color: #c82333; }
+        #add-link-btn, #add-client-btn { background-color: #28a745; }
+        #add-link-btn:hover, #add-client-btn:hover { background-color: #218838; }
+        #save-btn { background-color: #ffc107; color: #333; margin-top: 20px; font-weight: bold; width: 100%; padding: 15px; }
+        #save-btn:hover { background-color: #e0a800; }
+        #editing-client-name-display { background-color: #e9ecef; padding: 12px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="admin-panel">
+        <h1>顧問先データ管理</h1>
+
+        <h3>新しい顧問先を追加</h3>
+        <div class="flex-container">
+            <input type="text" id="new-client-name" placeholder="新しい顧問先の正式名称">
+            <input type="text" id="new-client-groupkey" placeholder="頭文字 (ひらがな一文字)" maxlength="1">
+            <button id="add-client-btn">追加</button>
+        </div>
+        <hr>
+        <h3>既存の顧問先を編集・削除</h3>
+        <div class="flex-container">
+            <select id="client-selector">
+                <option value="">-- 顧問先を選択してください --</option>
+            </select>
+            <button id="delete-client-btn" class="delete-btn" disabled>選択中の顧問先を削除</button>
+        </div>
+
+        <div id="links-editor" style="display:none;">
+            <h3>基本情報</h3>
+            <div class="form-grid">
+                <div id="editing-client-name-display"></div>
+                <input type="text" id="editing-groupkey" placeholder="頭文字 (ひらがな一文字)" maxlength="1">
+            </div>
+            
+            <h3>お知らせメッセージ</h3>
+            <textarea id="announcement-input" placeholder="顧問先への個別メッセージ（不要な場合は空欄）"></textarea>
+
+            <h3>リンク一覧</h3>
+            <div id="links-container"></div>
+            <button id="add-link-btn">+ 新しいリンクを追加</button>
+            <hr style="margin: 30px 0;">
+            <button id="save-btn">変更を保存</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0Pbky1S2z99_pHecpyV3kFaXWVdok9A",
+      authDomain: "visionapiproject-4456g10.firebaseapp.com",
+      projectId: "visionapiproject-445610",
+      storageBucket: "visionapiproject-445610.appspot.com",
+      messagingSenderId: "467175218532",
+      appId: "1:467175218532:web:235d41eebe36be9e32ae71",
+      measurementId: "G-9MDE72R6X4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const clientSelector = document.getElementById('client-selector');
+    const deleteClientBtn = document.getElementById('delete-client-btn');
+    const linksEditor = document.getElementById('links-editor');
+    const linksContainer = document.getElementById('links-container');
+    const editingClientNameDisplay = document.getElementById('editing-client-name-display');
+    const editingGroupKey = document.getElementById('editing-groupkey');
+    const announcementInput = document.getElementById('announcement-input');
+
+    async function loadClients() {
+        const selectedValue = clientSelector.value;
+        const querySnapshot = await getDocs(collection(db, "clients"));
+        clientSelector.innerHTML = '<option value="">-- 顧問先を選択してください --</option>';
+        const clients = [];
+        querySnapshot.forEach((doc) => {
+            if (doc.id !== 'main-portal' && doc.data().name) {
+                clients.push({ id: doc.id, name: doc.data().name });
+            }
+        });
+        
+        clients.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+
+        clients.forEach(client => {
+            const option = document.createElement('option');
+            option.value = client.id;
+            option.textContent = client.name;
+            clientSelector.appendChild(option);
+        });
+
+        clientSelector.value = selectedValue;
+    }
+
+    clientSelector.addEventListener('change', async (e) => {
+        const clientId = e.target.value;
+        deleteClientBtn.disabled = !clientId;
+        if (!clientId) {
+            linksEditor.style.display = 'none';
+            return;
+        }
+        const docRef = doc(db, "clients", clientId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            displayEditor(docSnap.data());
+            linksEditor.style.display = 'block';
+        }
+    });
+
+    function displayEditor(data) {
+        editingClientNameDisplay.textContent = data.name;
+        editingGroupKey.value = data.groupKey || '';
+        announcementInput.value = data.announcement || '';
+        linksContainer.innerHTML = '';
+        if (data.links && Array.isArray(data.links)) {
+            data.links.forEach(link => {
+                createLinkItem(link.title, link.url);
+            });
+        }
+    }
+    
+    document.getElementById('add-client-btn').addEventListener('click', async () => {
+        const newName = document.getElementById('new-client-name').value.trim();
+        const newGroupKey = document.getElementById('new-client-groupkey').value.trim();
+
+        if (!newName || !newGroupKey) {
+            alert('顧問先名と頭文字の両方を入力してください。');
+            return;
+        }
+        if (!/^[ぁ-ん]$/.test(newGroupKey)) {
+            alert('頭文字はひらがな一文字で入力してください。');
+            return;
+        }
+
+        const newId = `client-${Date.now()}`;
+        const newClientData = {
+            name: newName,
+            announcement: "",
+            theme: "simple-blue",
+            links: [],
+            groupKey: newGroupKey
+        };
+        try {
+            await setDoc(doc(db, "clients", newId), newClientData);
+            alert(`「${newName}」を追加しました。`);
+            document.getElementById('new-client-name').value = '';
+            document.getElementById('new-client-groupkey').value = '';
+            loadClients();
+        } catch (error) {
+            alert('追加中にエラーが発生しました。');
+            console.error("Error adding document: ", error);
+        }
+    });
+    
+    deleteClientBtn.addEventListener('click', async () => {
+        const clientId = clientSelector.value;
+        const clientName = clientSelector.options[clientSelector.selectedIndex].text;
+        if (!clientId) return;
+
+        if (confirm(`本当に「${clientName}」を削除しますか？\nこの操作は元に戻せません。`)) {
+            try {
+                await deleteDoc(doc(db, "clients", clientId));
+                alert(`「${clientName}」を削除しました。`);
+                linksEditor.style.display = 'none';
+                loadClients();
+            } catch (error) {
+                alert('削除中にエラーが発生しました。');
+                console.error("Error deleting document: ", error);
+            }
+        }
+    });
+
+    function createLinkItem(title = '', url = '') {
+        const div = document.createElement('div');
+        div.className = 'link-item';
+        div.innerHTML = `
+            <input type="text" class="link-title" placeholder="ボタン名 (例: R7年8月分)" value="${title}">
+            <input type="text" class="link-url" placeholder="スプレッドシートのURL" value="${url}">
+            <button class="delete-btn">削除</button>
+        `;
+        div.querySelector('.delete-btn').addEventListener('click', () => div.remove());
+        linksContainer.appendChild(div);
+    }
+
+    document.getElementById('add-link-btn').addEventListener('click', () => createLinkItem());
+
+    document.getElementById('save-btn').addEventListener('click', async () => {
+        const clientId = clientSelector.value;
+        if (!clientId) return;
+
+        const groupKey = editingGroupKey.value.trim();
+        if (!/^[ぁ-ん]$/.test(groupKey)) {
+            alert('頭文字はひらがな一文字で入力してください。');
+            return;
+        }
+
+        const newLinks = [];
+        const items = linksContainer.querySelectorAll('.link-item');
+        items.forEach(item => {
+            const title = item.querySelector('.link-title').value;
+            const url = item.querySelector('.link-url').value;
+            if (title && url) {
+                newLinks.push({ title, url, linkType: "external", isSpecial: false });
+            }
+        });
+
+        const announcement = announcementInput.value;
+
+        const docRef = doc(db, "clients", clientId);
+        try {
+            await updateDoc(docRef, {
+                links: newLinks,
+                announcement: announcement,
+                groupKey: groupKey
+            });
+            alert('保存しました！');
+        } catch (error) {
+            alert('保存中にエラーが発生しました。');
+            console.error("Error updating document: ", error);
+        }
+    });
+
+    loadClients();
+</script>
+
+</body>
+</html>

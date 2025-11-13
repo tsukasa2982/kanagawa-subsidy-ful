@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base target="_top">
+  <title>顧問先ページ</title>
+</head>
+<body>
+
+  <!-- ここに内容が動的に生成されます -->
+  <div id="app-container"><h1>読み込み中...</h1></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    
+    // あなたのFirebase設定情報
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0Pbky1S2z99_pHecpyV3kFaXWVdok9A",
+      authDomain: "visionapiproject-445610.firebaseapp.com",
+      projectId: "visionapiproject-445610",
+      storageBucket: "visionapiproject-445610.appspot.com",
+      messagingSenderId: "467175218532",
+      appId: "1:467175218532:web:235d41eebe36be9e32ae71",
+      measurementId: "G-9MDE72R6X4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+const pathParts = window.location.pathname.split('/');
+const clientId = pathParts[pathParts.length - 1];
+
+    async function loadData() {
+        if (!clientId) {
+            document.getElementById('app-container').innerHTML = '<h1>エラー</h1><p>IDが指定されていません。</p>';
+            return;
+        }
+        const docRef = doc(db, "clients", clientId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            renderPage(docSnap.data());
+        } else {
+            document.getElementById('app-container').innerHTML = `<h1>エラー</h1><p>ID: ${clientId} のデータが見つかりません。</p>`;
+        }
+    }
+
+    function renderPage(data) {
+        document.title = data.name;
+        const container = document.getElementById('app-container');
+        let buttonsHtml = '';
+
+        // ▼▼▼ .cssの有無に関わらず正しく判定するための変数を定義 ▼▼▼
+        const themeName = data.theme.replace('.css', '');
+
+        // ▼▼▼ テーマごとに正しいHTML骨組みを生成するように修正 ▼▼▼
+        switch (themeName) {
+            case 'orochi-summary-style':
+                data.links.forEach(link => {
+const href = (link.linkType === 'internal')
+    ? `/c/${link.targetClientId}` // 新しいURL形式に変更
+    : link.url;
+                    // 同一タブで開くように target を削除
+                    buttonsHtml += `<a href="${href}" class="company-button ${link.isSpecial ? 'orochi-special' : ''}" rel="noopener noreferrer">${link.title}</a>`;
+                });
+                container.innerHTML = `<div class="container"><h1>${data.name}</h1><p>ツールを利用したい会社を選択してください。</p><div class="button-grid">${buttonsHtml}</div>${data.announcement ? `<h2 class="orochi-group-heading">${data.announcement}</h2>` : ''}</div>`;
+                break;
+
+            case 'world-sangyo-style':
+                data.links.forEach(link => {
+                    buttonsHtml += `<a href="${link.url}" class="paint-can-button" target="_blank" rel="noopener noreferrer">${link.title}</a>`;
+                });
+                container.innerHTML = `<h1>${data.name}</h1><p>処理対象の月のボタンをクリックして、該当のスプレッドシートを開いてください。</p><div class="button-container">${buttonsHtml}</div>${data.announcement ? `<p class="update-info">${data.announcement}</p>` : ''}`;
+                break;
+            
+            case 'enshoji-re-style':
+                 data.links.forEach(link => {
+                    buttonsHtml += `<a href="${link.url}" class="link-button" target="_blank" rel="noopener noreferrer">${link.title}</a>`;
+                });
+                container.innerHTML = `<div class="dolphin"></div><div class="dolphin"></div><div class="dolphin"></div><h1>${data.name}</h1><p>処理対象の月のボタンをクリックして、該当のスプレッドシートを開いてください。</p><div class="container">${buttonsHtml}</div>`;
+                break;
+
+            default: // simple-blue, marusan-style, iwasaki-styleなど、その他全てのスタイル
+                data.links.forEach(link => {
+                    const specialId = link.isSpecial ? ' id="special-button"' : '';
+                    const href = (link.linkType === 'internal')
+                      ? `/c/${link.targetClientId}`
+                        : link.url;
+                    buttonsHtml += `<a href="${href}" class="link-button"${specialId} target="_blank" rel="noopener noreferrer">${link.title}</a>`;
+                });
+                // ボタン群を<div>で囲む骨組みを適用
+                container.innerHTML = `<h1>${data.name}</h1><p>処理対象の月のボタンをクリックして、該当のスプレッドシートを開いてください。</p><div>${buttonsHtml}</div>${data.announcement ? `<h2>${data.announcement}</h2>` : ''}`;
+                break;
+        }
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+        loadTheme(data.theme);
+    }
+
+    function loadTheme(theme) {
+        if (theme) {
+            const linkEl = document.createElement('link');
+            linkEl.rel = 'stylesheet';
+            // ▼▼▼ .cssの有無に関わらず正しいファイル名を生成するように修正 ▼▼▼
+            const cssFile = theme.endsWith('.css') ? theme : `${theme}.css`;
+            linkEl.href = `/styles/${cssFile}`;
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+            document.head.appendChild(linkEl);
+        }
+    }
+    loadData();
+  </script>
+
+</body>
+</html>

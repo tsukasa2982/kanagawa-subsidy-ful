@@ -1,0 +1,74 @@
+/* 墓石販売業をイメージした重厚感と信頼性のあるスタイル */
+body {
+  font-family: 'Noto Serif JP', 'Source Han Serif JP', 'ヒラギノ明朝 ProN W3', 'Hiragino Mincho ProN', serif;
+  padding: 30px;
+  background-color: #f5f5f5; /* 落ち着いたライトグレーの背景 */
+  color: #333; /* 基本の文字色 */
+}
+h1 {
+  color: #212121; /* 引き締まった黒 */
+  border-bottom: 2px solid #757575; /* 濃いグレーの下線 */
+  padding-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600; /* 少し太めのフォントで重みを表現 */
+  letter-spacing: 1px; /* 文字間を少し広げて格調高く */
+}
+p {
+  color: #424242; /* やや濃いめのグレー */
+  font-size: 16px;
+}
+.link-button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin: 15px 10px 15px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #616161; /* 御影石をイメージしたダークグレー */
+  border: 1px solid #424242; /* ボタンに輪郭を追加 */
+  border-radius: 3px; /* 角を少しだけ残し、堅実な印象に */
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2); /* 控えめな影で奥行きを出す */
+  transition: all 0.2s ease-in-out;
+}
+.link-button:hover {
+  background-color: #424242; /* マウスが乗った時の、より濃いグレー */
+  border-color: #212121;
+  transform: translateY(1px); /* ボタンを押し込むような効果 */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+/* H2は重要なお知らせとして少し目立たせる */
+H2 {
+    margin-top: 25px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #1a237e; /* 信頼感のある濃紺 */
+    background-color: #e8eaf6; /* 薄い藍色 */
+    border-left: 5px solid #3f51b5; /* 左側にアクセントのボーダー */
+}
+
+/* ▼▼▼ 特別なボタンのためのスタイル ▼▼▼ */
+
+/* ゆっくり光るアニメーションの定義 */
+@keyframes special-glow {
+  0% { box-shadow: 0 0 4px rgba(200, 160, 100, 0.3), 0 2px 3px rgba(0,0,0,0.2); }
+  50% { box-shadow: 0 0 14px rgba(200, 160, 100, 0.7), 0 2px 3px rgba(0,0,0,0.2); }
+  100% { box-shadow: 0 0 4px rgba(200, 160, 100, 0.3), 0 2px 3px rgba(0,0,0,0.2); }
+}
+
+/* IDで指定したボタンのスタイルを上書き */
+#special-button {
+  background-color: #a1887f; /* 品のあるカッパーゴールド */
+  border-color: #6d4c41;
+  /* アニメーションを適用 */
+  animation: special-glow 3s linear infinite;
+}
+
+#special-button:hover {
+  background-color: #8d6e63;
+  border-color: #5d4037;
+  animation-play-state: paused; /* マウスが乗ったら光るのを止める */
+}

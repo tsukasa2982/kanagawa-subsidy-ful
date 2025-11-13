@@ -1,0 +1,104 @@
+/* LASSEN風スタイル */
+body {
+  font-family: 'メイリオ', Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  padding: 30px;
+  /* 海のグラデーション背景 */
+  background: linear-gradient(to bottom, #001f3f, #007bff, #00bcd4);
+  background-attachment: fixed; /* 背景を固定 */
+  color: #e0f2f7; /* 明るいテキスト色 */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 読みやすくするための影 */
+}
+h1 {
+  color: #e0f2f7; /* 明るいタイトル色 */
+  border-bottom: 2px solid #00bcd4; /* シアン系の線 */
+  padding-bottom: 10px;
+  font-size: 32px; /* 少し大きめに */
+  text-align: center; /* 中央寄せ */
+  margin-bottom: 40px; /* 下に余白 */
+}
+p {
+  color: #e0f2f7;
+  font-size: 18px; /* 少し大きめに */
+  text-align: center;
+  margin-bottom: 30px;
+}
+.container {
+  text-align: center; /* ボタンを中央にまとめるためのコンテナ */
+}
+.link-button {
+  display: inline-block;
+  padding: 20px 40px; /* ボタンを大きく */
+  margin: 15px 15px; /* ボタン周りの余白 */
+  font-size: 22px; /* 文字サイズ */
+  font-weight: bold;
+  color: white;
+  /* 鮮やかなグラデーションボタン */
+  background: linear-gradient(to right, #ff6b6b, #ffa07a); /* 夕焼けのようなグラデーション */
+  border: none;
+  border-radius: 50px; /* 角をさらに丸くしてカプセル型に */
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; /* ホバー効果を滑らかに */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 立体感を出す影 */
+  position: relative; /* 疑似要素のために必要 */
+  overflow: hidden; /* 疑似要素がはみ出さないように */
+}
+.link-button:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.2); /* 光沢感 */
+  border-radius: 50%;
+  transition: all 0.7s ease;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+.link-button:hover:before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.link-button:hover {
+  background: linear-gradient(to right, #ffa07a, #ff6b6b); /* ホバーでグラデーション反転 */
+  transform: translateY(-5px); /* 少し浮き上がる */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* 影を濃く */
+}
+.link-button:active {
+  transform: translateY(0); /* クリックで元に戻る */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* イルカのCSSアート（装飾として） */
+.dolphin {
+  position: fixed;
+  width: 100px;
+  height: 60px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><path fill="%234FC3F7" d="M90,30c0,16.6-13.4,30-30,30C43.4,60,30,46.6,30,30C30,13.4,43.4,0,60,0C76.6,0,90,13.4,90,30z"/><path fill="%2329B6F6" d="M70,20c0,11-8.9,20-20,20C38.9,40,30,31.1,30,20C30,8.9,38.9,0,50,0C61.1,0,70,8.9,70,20z"/><path fill="%2329B6F6" d="M20,35c0,2.8-2.2,5-5,5s-5-2.2-5-5s2.2-5,5-5S20,32.2,20,35z"/><path fill="%2329B6F6" d="M30,30c0,2.8-2.2,5-5,5s-5-2.2-5-5s2.2-5,5-5S30,27.2,30,30z"/><path fill="%234FC3F7" d="M10,40c0,2.8-2.2,5-5,5s-5-2.2-5-5s2.2-5,5-5S10,37.2,10,40z"/></svg>') no-repeat center center;
+  background-size: contain;
+  animation: swim 20s linear infinite; /* 泳ぐアニメーション */
+  z-index: -1; /* 他の要素の下に */
+}
+.dolphin:nth-child(1) {
+  left: -150px;
+  top: 20%;
+  animation-delay: 0s;
+}
+.dolphin:nth-child(2) {
+  left: -200px;
+  top: 60%;
+  animation-delay: 5s;
+  transform: scaleX(-1); /* 反転させる */
+}
+.dolphin:nth-child(3) {
+  left: -100px;
+  top: 40%;
+  animation-delay: 10s;
+}
+
+@keyframes swim {
+  0% { left: -150px; }
+  100% { left: calc(100% + 150px); }
+}

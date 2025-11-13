@@ -1,0 +1,124 @@
+/* Google Fontsの読み込み - 力強いゴシック体と手書き風のフォント */
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Kalam:wght@700&display=swap');
+
+/* 全体的なスタイル */
+body {
+  font-family: 'BIZ UDPGothic', sans-serif; /* メインフォント */
+  padding: 40px;
+  background: linear-gradient(to bottom right, #f0f4f7, #e0e6eb); /* ややグラデーションのある背景 */
+  color: #333; /* 文字色 */
+  line-height: 1.6;
+  text-align: center; /* 全体を中央寄せ */
+  min-height: 100vh; /* 画面全体の高さを確保 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ヘッダーセクション */
+h1 {
+  font-family: 'Kalam', cursive; /* タイトルに手書き風フォント */
+  color: #2c3e50; /* 濃い目の青緑 */
+  border-bottom: 4px solid #e67e22; /* オレンジの強調線 */
+  padding-bottom: 15px;
+  font-size: 40px; /* タイトルを大きく */
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* 強めの影 */
+  letter-spacing: 2px; /* 字間を少し開ける */
+}
+
+/* 説明文 */
+p {
+  color: #555;
+  font-size: 18px;
+  margin-bottom: 30px;
+  max-width: 800px; /* 説明文の幅を制限 */
+}
+
+/* ボタンコンテナ */
+.button-container {
+  display: flex;
+  flex-wrap: wrap; /* ボタンが多すぎたら折り返す */
+  justify-content: center;
+  gap: 25px; /* ボタン間のスペースを広げる */
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* 半透明の白背景でボタンを目立たせる */
+  border-radius: 15px; /* 角を丸く */
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1); /* 影を強める */
+}
+
+/* リンクボタン */
+.paint-can-button {
+  display: inline-block;
+  padding: 20px 40px; /* ボタンのサイズを大きく */
+  font-size: 22px; /* 文字サイズを大きく */
+  font-weight: bold;
+  color: white;
+  background-color: #3498db; /* 明るい青 */
+  border: 3px solid #2980b9; /* 濃いめの枠線で缶の立体感を */
+  border-radius: 12px; /* 角を丸く */
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease; /* ホバー効果を滑らかに */
+  box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* 強めの影 */
+  position: relative; /* 疑似要素のために必要 */
+  overflow: hidden; /* 疑似要素がはみ出さないように */
+}
+
+.paint-can-button::before {
+  content: '🎨'; /* 絵の具パレットの絵文字 */
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 20px;
+  opacity: 0.8;
+  transition: transform 0.3s ease;
+}
+
+.paint-can-button:hover {
+  background-color: #2980b9; /* マウスが乗った時の色 */
+  transform: translateY(-5px) scale(1.02); /* 少し浮き上がって拡大 */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* さらに強い影 */
+}
+
+.paint-can-button:hover::before {
+  transform: rotate(15deg); /* 絵文字を回転 */
+}
+
+/* 更新情報 */
+.update-info {
+  text-align: center;
+  margin-top: 50px; /* 上部の余白を広げる */
+  font-size: 16px;
+  color: #777;
+  border-top: 2px dashed #999; /* 点線で区切り線を強調 */
+  padding-top: 25px; /* 上部のパディングを広げる */
+  max-width: 800px; /* 幅を制限 */
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  p {
+    font-size: 16px;
+  }
+  .paint-can-button {
+    padding: 15px 30px;
+    font-size: 18px;
+  }
+  .paint-can-button::before {
+    font-size: 16px;
+  }
+  .button-container {
+    padding: 15px;
+    gap: 15px;
+  }
+}

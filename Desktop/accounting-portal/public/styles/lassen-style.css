@@ -1,0 +1,211 @@
+/* --- ラッセン風デザイン設定（CSS変数） --- */
+:root {
+    --lassen-bg-start: #000033; /* 深い夜の海のような紺色 */
+    --lassen-bg-end: #003366; /* 少し明るい青 */
+    --lassen-panel-bg: rgba(255, 255, 255, 0.85); /* 半透明の白パネル */
+    --lassen-header-bg-start: #4B0082; /* 紫（オーロラや夕焼け） */
+    --lassen-header-bg-end: #00BFFF; /* ディープスカイブルー */
+    --lassen-border-main: #00FFFF; /* シアン（光のライン） */
+    --lassen-border-dark: #000033; /* 非常に濃い紺色 */
+    --lassen-text-dark: #333333; /* 基本テキスト色（濃いグレー） */
+    --lassen-text-light: #FFFFFF; /* 明るいテキスト色（白） */
+    --lassen-text-outline: #000000; /* テキストのアウトライン色（黒） */
+    --lassen-shadow-glow: 0 0 15px rgba(0, 255, 255, 0.6); /* シアンの光る影 */
+    --lassen-button-glow: 0 0 8px rgba(0, 255, 255, 0.8); /* ボタンの光る影 */
+    --lassen-red-accent: #E54343; /* 赤のアクセント色（深みのある） */
+}
+
+/* --- 全体スタイル --- */
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-weight: 800;
+    background-color: var(--lassen-bg-start);
+    background-image: linear-gradient(to bottom right, var(--lassen-bg-start) 0%, var(--lassen-bg-end) 100%); /* 深い海のようなグラデーション */
+    color: var(--lassen-text-light); /* 全体的に明るい文字色 */
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* 縦方向のスクロールを許可 */
+    position: relative;
+}
+
+/* 背景の光るエフェクト */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0,255,255,0.3) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    animation: backgroundGlow 15s infinite alternate;
+}
+body::before {
+    top: 10%;
+    left: 5%;
+}
+body::after {
+    bottom: 15%;
+    right: 10%;
+    animation-delay: -7.5s;
+}
+
+@keyframes backgroundGlow {
+    0% { transform: translate(0, 0); opacity: 0.7; }
+    50% { transform: translate(50px, 30px); opacity: 0.9; }
+    100% { transform: translate(0, 0); opacity: 0.7; }
+}
+
+/* メインコンテナのラッセン風スタイル */
+.main-container {
+    background-color: var(--lassen-panel-bg);
+    border: 3px solid var(--lassen-border-main); /* シアンの細い光る縁 */
+    border-radius: 20px; /* 柔らかい丸み */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.4); /* 強い影と内側の光 */
+    width: 100%;
+    max-width: 1200px;
+    padding: 0;
+    margin: 20px auto; /* 上下のマージンを適用 */
+    position: relative;
+    overflow: hidden; 
+    box-sizing: border-box;
+    backdrop-filter: blur(5px); /* 背景のぼかし */
+}
+
+/* ヘッダーセクションのスタイル */
+.header-section {
+    background: var(--lassen-header-bg-start); /* 紫から青のグラデーションヘッダー */
+    background-image: linear-gradient(to right, var(--lassen-header-bg-start) 0%, var(--lassen-header-bg-end) 100%);
+    border-bottom: 3px solid var(--lassen-border-main); /* シアンの下線 */
+    padding: 15px 25px;
+    text-align: left;
+    position: relative;
+    z-index: 10;
+}
+.header-section h1 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    color: var(--lassen-text-light); /* 白い文字 */
+    font-size: 38px;
+    font-weight: 900;
+    display: inline-block;
+    text-shadow: 2px 2px 0px var(--lassen-text-outline), /* 黒いアウトライン */
+                 -2px -2px 0px var(--lassen-text-outline),
+                 2px -2px 0px var(--lassen-text-outline),
+                 -2px 2px 0px var(--lassen-text-outline),
+                 0 0 10px rgba(255, 255, 255, 0.8); /* 強い発光 */
+    letter-spacing: 2px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* 説明文スタイル */
+p.description {
+    color: var(--lassen-text-dark); /* パネル内の文字は濃い色 */
+    font-size: 20px;
+    margin: 30px auto;
+    line-height: 1.6;
+    font-weight: 700;
+    padding: 0 25px;
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.8); /* 柔らかい白の縁取り */
+}
+
+/* ボタンコンテナのスタイル */
+#company-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px;
+    padding: 0 25px 30px;
+}
+
+/* 共通ボタンのスタイル (ラッセン風) */
+.company-button {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    flex: 1 1 270px;
+    max-width: 300px;
+    padding: 25px 30px;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--lassen-text-light); /* 白テキストがデフォルト */
+    border: 3px solid var(--lassen-border-main); /* シアンの縁 */
+    border-radius: 15px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease-out; /* 滑らかな動き */
+    position: relative;
+    overflow: hidden;
+    /* テキストの縁取り（黒） */
+    text-shadow: 2px 2px 0px var(--lassen-text-outline),
+                 -2px -2px 0px var(--lassen-text-outline),
+                 2px -2px 0px var(--lassen-text-outline),
+                 -2px 2px 0px var(--lassen-text-outline);
+    /* 光る影 */
+    box-shadow: var(--lassen-button-glow), 0 5px 15px rgba(0,0,0,0.4);
+    transform: translateY(0);
+}
+
+.company-button:hover {
+    transform: translateY(-5px) scale(1.03); /* ホバーで大きく浮き上がり、拡大 */
+    box-shadow: 0 0 15px rgba(0, 255, 255, 1), 0 10px 25px rgba(0,0,0,0.5); /* 発光を強調 */
+}
+.company-button:active {
+    transform: translateY(0) scale(1.0); /* クリックで元の位置に */
+    box-shadow: var(--lassen-button-glow), 0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* 色の自動割り当て */
+#company-list-container .company-button:nth-child(6n+1) { background: linear-gradient(to bottom, #00BFFF, #007ACC); }
+#company-list-container .company-button:nth-child(6n+2) { background: linear-gradient(to bottom, #9370DB, #8A2BE2); }
+#company-list-container .company-button:nth-child(6n+3) {
+    background: linear-gradient(to bottom, #FFD700, #FFA500);
+    color: var(--lassen-text-dark);
+    text-shadow: 2px 2px 0px var(--lassen-text-light),
+                 -2px -2px 0px var(--lassen-text-light),
+                 2px -2px 0px var(--lassen-text-light),
+                 -2px 2px 0px var(--lassen-text-light);
+    box-shadow: 0 0 8px rgba(255, 255, 0, 0.8), 0 5px 15px rgba(0,0,0,0.4);
+}
+#company-list-container .company-button:nth-child(6n+3):hover {
+    box-shadow: 0 0 15px rgba(255, 255, 0, 1), 0 10px 25px rgba(0,0,0,0.5);
+}
+#company-list-container .company-button:nth-child(6n+4) { background: linear-gradient(to bottom, #32CD32, #228B22); }
+#company-list-container .company-button:nth-child(6n+5) { background: linear-gradient(to bottom, #FF69B4, #C71585); }
+#company-list-container .company-button:nth-child(6n+6) { background: linear-gradient(to bottom, #00CED1, #4682B4); }
+
+/* オロチグループ集約ボタン 特別スタイル */
+.orochi-link-button {
+    background: linear-gradient(to right, #4682B4, #00BFFF) !important;
+    border-color: var(--lassen-border-main) !important;
+    transform: scale(1.1) rotate(2deg) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.9), 0 15px 35px rgba(0,0,0,0.7) !important;
+    font-size: 26px !important;
+    padding: 28px 38px !important;
+    flex-basis: calc(50% - 14px);
+    max-width: calc(50% - 14px);
+    color: var(--lassen-text-light) !important;
+    text-shadow: 3px 3px 0px var(--lassen-text-outline),
+                 -3px -3px 0px var(--lassen-text-outline),
+                 3px -3px 0px var(--lassen-text-outline),
+                 -3px 3px 0px var(--lassen-text-outline);
+}
+.orochi-link-button::before {
+    content: '🐳' !important;
+    font-size: 38px !important;
+    color: var(--lassen-text-light) !important;
+    position: absolute;
+    left: 8px !important;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg) !important;
+    text-shadow: none !important;
+}
+.orochi-link-button:hover {
+    transform: scale(1.15) translateY(-8px) rotate(-2deg) !important;
+    background-image: linear-gradient(to right, #00BFFF, #4682B4) !important;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 20px 40px rgba(0,0,0,0.8) !important;
+}

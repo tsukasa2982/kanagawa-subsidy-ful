@@ -1,0 +1,100 @@
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 20px;
+  background-color: #eef2f7;
+  color: #333;
+  text-align: center;
+  min-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+    width: 100%;
+    max-width: 700px;
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+h1 {
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 15px;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  display: inline-block;
+}
+p {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+.company-button {
+  display: block;
+  background-color: #3498db;
+  color: white;
+  padding: 20px 25px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.company-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background-color: rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+}
+.company-button:hover,
+.company-button:focus {
+  background-color: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+.company-button:hover::before {
+    width: 100%;
+    background-color: rgba(255,255,255,0.1);
+}
+.orochi-group-heading {
+  font-size: 20px;
+  color: #34495e;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #bdc3c7;
+}
+.orochi-button-container {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.company-button.orochi-special {
+    background-color: #27ae60;
+}
+.company-button.orochi-special:hover {
+    background-color: #229954;
+}

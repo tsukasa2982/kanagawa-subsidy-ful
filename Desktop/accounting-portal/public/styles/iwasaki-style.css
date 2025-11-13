@@ -1,0 +1,58 @@
+/* 造花の卸売業をイメージした優雅で温かみのあるスタイル */
+body {
+  font-family: 'Georgia', 'Shippori Mincho', 'ヒラギノ明朝 ProN W3', 'Hiragino Mincho ProN', '游明朝', YuMincho, serif;
+  padding: 30px;
+  background-color: #FDF8F5; /* 温かみのあるオフホワイトの背景 */
+  color: #5D4037; /* 落ち着いたブラウンの文字色 */
+}
+h1 {
+  color: #4E342E; /* より濃いブラウン */
+  border-bottom: 2px solid #A5D6A7; /* 若葉のようなグリーンの下線 */
+  padding-bottom: 10px;
+  font-size: 24px;
+  font-weight: normal;
+}
+p {
+  color: #795548; /* 少し明るいブラウン */
+  font-size: 16px;
+}
+.link-button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin: 15px 10px 15px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: #E57373; /* 柔らかい花のような赤ピンク */
+  border: none;
+  border-radius: 8px; /* 角をより丸く */
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 柔らかい影 */
+  transition: all 0.3s ease; /* アニメーション効果を滑らかに */
+}
+.link-button:hover {
+  background-color: #D32F2F; /* マウスが乗った時の少し濃い色 */
+  transform: translateY(-3px); /* 少し浮き上がる効果 */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 点滅アニメーションの定義 */
+@keyframes blink {
+  0% { color: #E57373; }
+  50% { color: transparent; }
+  100% { color: #E57373; }
+}
+
+/* h2タグにアニメーションを適用 */
+h2 {
+  animation: blink 1.5s linear infinite; /* アニメーションを1.5秒間隔で無限に繰り返す */
+  font-weight: normal;
+}
+
+/* h3は少し小さく、注意を引くように */
+h3 {
+    font-size: 14px;
+    color: #BF360C;
+}
