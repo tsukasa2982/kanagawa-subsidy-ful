@@ -1,3 +1,5 @@
+// ファイルパス: page.tsx (全文・タイポ修正版)
+
 // This "use client" directive is essential for components that use React hooks like useState and useEffect.
 // Our page component fetches data from Firestore on the client side, so it must be a client component.
 "use client";
@@ -122,6 +124,54 @@ const AccordionContent = ({ children, className }: { children: React.ReactNode, 
   </div>
 );
 
+// --- ★★★ ここからが追加した「管理パネル」コンポーネントです ★★★ ---
+function ManualFlowTrigger() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleRunFlow = async () => {
+    setIsLoading(true);
+    setMessage('AIフローを実行中です...');
+    try {
+      // 1. で作成したAPIルートを呼び出す
+      const response = await fetch('/api/run-flow', {
+        method: 'POST',
+      });
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setMessage('AIフローの実行を開始しました。データが反映されるまで数分待ち、ページを再読み込みしてください。');
+      } else {
+        throw new Error(data.error || '不明なエラー');
+      }
+    } catch (err) {
+      setMessage(`エラーが発生しました: ${(err as Error).message}`);
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="mb-8 p-6 bg-white shadow-md rounded-lg border">
+      <h2 className="text-xl font-display font-semibold text-primary mb-4" style={{ color: "#2E3192" }}>
+        管理用パネル
+      </h2>
+      <p className="text-sm text-gray-600 mb-4">
+        ボタンを押すと、AIによる補助金情報の収集と要約（Genkitフロー）を手動で実行します。
+      </p>
+      <button 
+        onClick={handleRunFlow} 
+        disabled={isLoading}
+        className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+        style={{ backgroundColor: "#2E3192" }} // 色をデザインに合わせる
+      >
+        {isLoading ? '実行中...' : 'AI情報収集を実行'}
+      </button>
+      {message && <p className="mt-4 text-sm text-gray-700">{message}</p>}
+    </div>
+  );
+}
+// --- ★★★ 追加コンポーネントはここまで ★★★ ---
+
 
 // --- Main Page Component ---
 
@@ -202,6 +252,9 @@ export default function HomePage() {
             神奈川県の補助金・助成金情報をAIが要約してナビゲートします。
           </p>
         </header>
+
+        {/* ★★★ ここに「管理パネル」を配置 ★★★ */}
+        <ManualFlowTrigger />
 
         {/* --- Content Section --- */}
         <div className="space-y-8">
@@ -309,7 +362,9 @@ export default function HomePage() {
                     </a>
                   </div>
 
-                </CardContent>
+                </CardContent> 
+                {/* ★★★ ここのタイポ </CartContent> を </CardContent> に修正しました ★★★ */}
+
               </Card>
             ))
           )}
