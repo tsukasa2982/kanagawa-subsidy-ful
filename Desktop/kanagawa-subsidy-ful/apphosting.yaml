@@ -1,11 +1,4 @@
 # apphosting.yaml
-run:
-  # Next.jsの起動コマンドを指定します
-  command: npm run start
-build:
-  # Next.jsのビルドコマンドを指定します
-  command: npm run build
-# Next.jsアプリに必要な環境変数を設定します
 env:
   - variable: NODE_ENV
     value: production
