@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>俺のネットショップ、税金で詰むわけがない！？</title>
+
+  <script src="/__/firebase/9.6.1/firebase-app-compat.js"></script>
+  <script src="/__/firebase/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="/__/firebase/9.6.1/firebase-functions-compat.js"></script>
+  <script src="/__/firebase/9.6.1/firebase-auth-compat.js"></script>
+  <script src="/__/firebase/init.js"></script>
+
+  <style>
+  /* 既存のスタイルを活かしつつ、UIを洗練 */
+  #dialogue-box {
+    background: rgba(0, 10, 30, 0.85); /* 深みのある青黒 */
+    border-top: 3px solid #4a90e2; /* アクセントカラー */
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    padding: 20px 40px;
+    height: 180px; /* 少し余裕を持たせる */
+  }
+
+  #character-name-box {
+    color: #ffd700; /* ゴールドで名前を強調 */
+    font-size: 1.5em;
+    text-shadow: 1px 1px 3px rgba(0,0,0,1);
+    background: rgba(0,0,0,0.5);
+    display: inline-block;
+    padding: 2px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  #dialogue-text {
+    font-size: 1.6em; /* さらに読みやすく */
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+  }
+
+  /* セーブボタンなどのUIをモダンに */
+  #ui-buttons button {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    font-weight: bold;
+    transition: transform 0.1s;
+  }
+  #ui-buttons button:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+</head>
+<body>
+  <div id="loading-overlay">読み込み中...</div>
+  <div id="game-container">
+    <div id="title-screen">
+      <img id="title-image" src="https://github.com/user-attachments/assets/b49f1c09-3510-44a7-a543-b8ce068f41bd" alt="Game Title">
+      <button class="title-button" id="start-new-button">はじめから</button>
+      <button class="title-button" id="load-game-button">つづきから</button>
+      <div id="name-input-container">
+        <input type="text" id="player-name-input" placeholder="あなたの名前を入力">
+        <button class="title-button" id="confirm-name-button">決定</button>
+      </div>
+      <div id="load-input-container">
+        <input type="text" id="save-code-input" placeholder="セーブコードを入力">
+        <button class="title-button" id="confirm-load-button">ロード</button>
+      </div>
+    </div>
+    
+    <div id="ui-buttons" style="display: none;">
+        <button id="save-button">セーブ</button>
+    </div>
+
+    <div id="character-container"></div>
+    <div id="dialogue-box" style="display: none;">
+      <div id="character-name-box"></div>
+      <div id="dialogue-text"></div>
+    </div>
+
+    <div id="image-overlay">
+      <img id="overlay-image" src="">
+    </div>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>
